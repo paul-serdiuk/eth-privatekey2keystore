@@ -1,7 +1,7 @@
 // https://ethereum.stackexchange.com/a/11226/20417
 
 let privateKey = process.argv[2];
-let password = process.argv[3]
+let password = process.argv[3];
 
 if (!privateKey || privateKey.length === 0) {
   console.log("You need to specify a private key");
