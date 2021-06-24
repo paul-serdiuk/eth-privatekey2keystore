@@ -1,4 +1,6 @@
-// https://ethereum.stackexchange.com/a/11226/20417
+#!/usr/bin/env node
+
+let fs = require('fs');
 
 let privateKey = process.argv[2];
 let password = process.argv[3];
@@ -16,5 +18,12 @@ if (!password || password.length === 0) {
 let Wallet = require('ethereumjs-wallet');
 let key = Buffer.from(privateKey, 'hex');
 let wallet = Wallet.fromPrivateKey(key);
-let s = wallet.toV3String(password, {kdf: 'scrypt', dklen: 32, n: 4096, p: 6, r: 8, cipher: 'aes-128-ctr'});
-console.log(s);
+let fileString = wallet.toV3String(password, {kdf: 'scrypt', dklen: 32, n: 4096, p: 6, r: 8, cipher: 'aes-128-ctr'});
+let ts = new Date()
+let fileName = ['./','UTC--',ts.toJSON().replace(/:/g, '-'),'--',wallet.getAddress().toString('hex')].join('');
+
+fs.writeFile(fileName, fileString, function(err) {
+  if(err) {
+    return console.log(err);
+  }
+});
